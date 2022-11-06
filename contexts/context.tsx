@@ -20,7 +20,14 @@ function ContextWrapper({ children }: { children: React.ReactElement }) {
   const [maxGuesses, setMaxGuesses] = useState<number>(6);
   const [usedGuesses, setUsedGuesses] = useState<number>(0);
   const [usedKeys, setUsedKeys] = useState<string[]>([]);
-  const [wordToGuess, setWordToGuess] = useState<string[]>([]);
+  const [wordToGuess, setWordToGuess] = useState<string[]>([
+    "j",
+    "u",
+    "s",
+    "t",
+    "s",
+    "g",
+  ]);
   const [correctGuesses, setCorrectGuesses] = useState<string[]>([]);
 
   return (
