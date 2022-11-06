@@ -19,6 +19,7 @@ function StickmanTitle() {
     setUsedKeys,
     usedGuesses,
     maxGuesses,
+    setCorrectGuesses,
   } = useMainContext();
 
   const handleNewWord = useCallback(async () => {
@@ -26,6 +27,7 @@ function StickmanTitle() {
     setWordToGuess(word.split(""));
     setUsedGuesses(0);
     setUsedKeys([]);
+    setCorrectGuesses([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setWordToGuess]);
 

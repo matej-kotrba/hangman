@@ -8,6 +8,8 @@ interface initalStateInterface {
   setUsedKeys: React.Dispatch<((old: string[]) => string[]) | string[]>;
   wordToGuess: string[];
   setWordToGuess: React.Dispatch<string[]>;
+  correctGuesses: string[];
+  setCorrectGuesses: React.Dispatch<string[] | ((old: string[]) => string[])>;
 }
 
 const MainContext = createContext<initalStateInterface>(
@@ -19,6 +21,7 @@ function ContextWrapper({ children }: { children: React.ReactElement }) {
   const [usedGuesses, setUsedGuesses] = useState<number>(0);
   const [usedKeys, setUsedKeys] = useState<string[]>([]);
   const [wordToGuess, setWordToGuess] = useState<string[]>([]);
+  const [correctGuesses, setCorrectGuesses] = useState<string[]>([]);
 
   return (
     <MainContext.Provider
@@ -30,6 +33,8 @@ function ContextWrapper({ children }: { children: React.ReactElement }) {
         setUsedKeys,
         wordToGuess,
         setWordToGuess,
+        correctGuesses,
+        setCorrectGuesses,
       }}
     >
       {children}

@@ -1,33 +1,10 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { useMainContext } from "../../contexts/context";
 
 const KEYS = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
+  ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p"],
+  ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+  ["y", "x", "c", "v", "b", "n", "m"],
 ];
 
 function Keyboard() {
@@ -38,48 +15,87 @@ function Keyboard() {
     maxGuesses,
     usedGuesses,
     wordToGuess,
+    setCorrectGuesses,
   } = useMainContext();
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const key = e.currentTarget.dataset.key;
+  const handleKey = useCallback(
+    (key: string) => {
+      if (
+        key &&
+        !usedKeys.some((letter) => key === letter) &&
+        usedGuesses < maxGuesses
+      ) {
+        setUsedKeys((old) => {
+          return [...old, key as string];
+        });
+        // Check if letter is in the word user should guess
+        if (!wordToGuess.some((letter) => key === letter)) {
+          setUsedGuesses((old) => old + 1);
+        } else {
+          setCorrectGuesses((old) => [...old, key as string]);
+        }
+      }
+    },
+    [
+      maxGuesses,
+      setCorrectGuesses,
+      setUsedGuesses,
+      setUsedKeys,
+      usedGuesses,
+      usedKeys,
+      wordToGuess,
+    ]
+  );
 
-    // Check if:
-    // key was already guessed
-    // user has any tries left
-    if (
-      !usedKeys.some((letter) => key === letter) &&
-      usedGuesses < maxGuesses
-    ) {
-      setUsedKeys((old) => {
-        return [...old, key as string];
-      });
-      // Check if letter is in the word user should guess
-      if (!wordToGuess.some((letter) => key === letter))
-        setUsedGuesses((old) => old + 1);
-    }
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const key = e?.currentTarget?.dataset?.key;
+
+    if (key) handleKey(key as string);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    const key = e?.key;
+
+    if (key) handleKey(key);
+  };
+
+  useEffect(() => {
+    addEventListener("keypress", handleKeyDown);
+    return () => removeEventListener("keypress", handleKeyDown);
+  }, [handleKey]);
+
+  const KeyRow = (item: string[]) => {
+    const data = item.map((letter: string, index: number) => {
+      let bgColor: string = "bg-transparent";
+      if (usedKeys.some((item) => item === letter)) {
+        if (wordToGuess.some((item) => item === letter)) {
+          bgColor = "bg-blue-500";
+        } else bgColor = "bg-gray-700";
+      }
+
+      return (
+        <div
+          key={index}
+          data-key={letter}
+          className={`w-[70px] aspect-[2/3] ${bgColor} border-4 border-black rounded-md
+         flex flex-col justify-center items-center cursor-pointer select-none hover:scale-105`}
+          onClick={(e) => handleClick(e)}
+        >
+          <span className="text-4xl font-bold uppercase text-white grid text-center">
+            {letter}
+          </span>
+        </div>
+      );
+    });
+    return data;
   };
 
   return (
-    <div className="flex gap-2 flex-wrap w-[700px] justify-center m-auto">
-      {KEYS.map((letter: string, index: number) => {
-        let bgColor = "bg-transparent";
-        if (usedKeys.some((item) => item === letter)) {
-          if (wordToGuess.some((item) => item === letter)) {
-            bgColor = "bg-blue-500";
-          } else bgColor = "bg-gray-700";
-        }
-
+    <div className="w-fit mx-auto flex flex-col gap-1">
+      {KEYS.map((item: string[], index: number) => {
         return (
-          <div
-            key={index}
-            data-key={letter}
-            className={`w-[70px] aspect-[2/3] ${bgColor} border-4 border-black rounded-md
-             flex flex-col justify-center items-center cursor-pointer select-none`}
-            onClick={(e) => handleClick(e)}
-          >
-            <span className="text-4xl font-bold uppercase text-white grid text-center">
-              {letter}
-            </span>
+          <div key={index} className="flex gap-1 justify-center">
+            {KeyRow(item)}
           </div>
         );
       })}
