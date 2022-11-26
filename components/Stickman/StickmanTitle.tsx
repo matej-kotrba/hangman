@@ -1,14 +1,6 @@
 import { useEffect, useCallback } from "react";
 import { useMainContext } from "../../contexts/context";
-
-async function fetchWord() {
-  // Fetches word from api and returns first word in an array
-  const json = await fetch(
-    "https://random-word-api.herokuapp.com/word?number=1&length=6"
-  );
-  const data = await json.json();
-  return data[0];
-}
+import { NextApiResponse } from "next";
 
 function StickmanTitle() {
   const {
@@ -23,7 +15,11 @@ function StickmanTitle() {
   } = useMainContext();
 
   const handleNewWord = useCallback(async () => {
-    const word: string = await fetchWord();
+    if (!process.env.NEXT_PUBLIC_SITE_ADDRESS) return;
+    const data: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_ADDRESS}/api/requestNewWord`
+    );
+    const word = await data.json();
     setWordToGuess(word.split(""));
     setUsedGuesses(0);
     setUsedKeys([]);

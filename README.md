@@ -9,4 +9,4 @@ in the root of your project
 
 OR
 
-#1 to try online go on internet address https://mkit2009-hangman.vercel.app
+#1 to try online go on address https://mkit2009-hangman.vercel.app

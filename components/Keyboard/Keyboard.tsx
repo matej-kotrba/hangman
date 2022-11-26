@@ -25,6 +25,18 @@ function Keyboard() {
         !usedKeys.some((letter) => key === letter) &&
         usedGuesses < maxGuesses
       ) {
+        // Check if key is allowed
+        let isValidKey = false;
+        for (let keysArray of KEYS) {
+          // Checks if key is found in an array, else continue
+          if (keysArray.some((item) => item === key)) {
+            isValidKey = true;
+            break;
+          }
+        }
+        // If key was not found in an array, return
+        if (isValidKey === false) return;
+
         setUsedKeys((old) => {
           return [...old, key as string];
         });
