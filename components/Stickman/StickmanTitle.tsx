@@ -55,7 +55,7 @@ function StickmanTitle() {
       <button
         type="button"
         onClick={handleNewWord}
-        className="fixed left-2 top-2 bg-blue-500 text-white p-6 font-bold rounded-md hover:bg-blue-600 overflow-hidden
+        className="absolute left-2 top-2 bg-blue-500 text-white p-6 font-bold rounded-md hover:bg-blue-600 overflow-hidden
         before:content-[''] before:absolute before:w-12 before:h-[300%] before:bg-reflectionEffect before:top-[10%] before:origin-center
         before:left-[-40%] before:translate-y-[-50%] before:rotate-[45deg] hover:before:left-[110%] hover:before:top-[110%]
         hover:before:duration-700 before:ease duration-200"
